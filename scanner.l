@@ -24,6 +24,7 @@ int yyline = 1;
 %option noyywrap
 
 WS          [ \t]
+DIGIT	    [0-9]
 
 %%
 "/*"        {
