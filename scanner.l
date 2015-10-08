@@ -25,8 +25,75 @@ int yyline = 1;
 
 WS          [ \t]
 DIGIT	    [0-9]
+ID          [_a-zA-Z][_a-zA-Z0-9]*
+SIGN	    [+|-]
+
 
 %%
+{SIGN}?{DIGIT}+	    {
+		printf("Matched int\n");
+		printf("val = %s\n", yytext);
+		yylval.intval = atoi(yytext);
+		yTRACE(INTTOK);
+		return (INTTOK);
+}
+
+{SIGN}?{DIGIT}+"."{DIGIT}* {printf("matched float\n"); yTRACE(FLOATTOK);}
+
+
+"bool"      	{
+		printf ("match bool type\n");
+	     	yTRACE(BOOL_TTOK);
+		}
+
+"int"      	{
+		printf ("match int type\n");
+	     	yTRACE(INT_TTOK);
+		return (INT_TTOK);
+		}
+
+
+"bvec2"      	{
+		printf ("match bvec2 type\n");
+	     	yTRACE(BVEC2_TTOK);
+		}
+
+
+"bvec3"      	{
+		printf ("match bvec3 type\n");
+	     	yTRACE(BVEC3_TTOK);
+		}
+
+"bvec4"      	{
+		printf ("match bvec4 type\n");
+	     	yTRACE(BVEC4_TTOK);
+		}
+
+"ivec2"      	{
+		printf ("match ivec2 type\n");
+	     	yTRACE(IVEC2_TTOK);
+		}
+
+"ivec3"      	{
+		printf ("match ivec3 type\n");
+	     	yTRACE(IVEC3_TTOK);
+		}
+
+"ivec4"      	{
+		printf ("match ivec4 type\n");
+	     	yTRACE(IVEC4_TTOK);
+		}
+
+
+
+
+{ID}		{
+		printf("matched identifier\n");
+		yTRACE(IDTOK);
+		return (IDTOK);
+		}
+
+
 "/*"        {
               int c1      = 0;
               int c2      = yyinput();
