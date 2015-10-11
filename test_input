@@ -1,0 +1,8 @@
+{
+int first_var = 1;
+int second_var = 2;
+float thrid_var = 3.0;
+vec myVec = vec2(1.2, 3.2);
+bvec3 myBVec = bvec3(true,false,true);
+vec4 tempVec = myVec1 * Vec2;
+}

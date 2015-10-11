@@ -48,6 +48,7 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 		printf("matched float\n");
 		yylval.floatval = strtof(yytext, NULL);
 		yTRACE(FLOAT_VAL);
+		return(FLOAT_VAL);
 		}
 
 "int"      	{
@@ -151,6 +152,18 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 		printf ("match assign tok\n");
 	     	yTRACE(ASSIGN_TOK);
 		return (ASSIGN_TOK);
+		}
+
+"true"      	{
+		printf ("match true tok\n");
+	     	yTRACE(TRUE_TOK);
+		return (TRUE_TOK);
+		}
+
+"false"      	{
+		printf ("match false tok\n");
+	     	yTRACE(FALSE_TOK);
+		return (FALSE_TOK);
 		}
 
 "!"      	{

@@ -1,0 +1,5 @@
+Run command:
+1) make
+2) ./compiler467 -Tn -R trace.out -E error.out test_input
+
+Check trace output
