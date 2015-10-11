@@ -28,26 +28,27 @@ WS          [ \t]
 DIGIT	    [0-9]
 ID          [_a-zA-Z][_a-zA-Z0-9]*
 SIGN	    [+|-]
-
+INTEGER     {SIGN}?(0|[1-9]{DIGIT}*)
+DECIMAL     {INTEGER}"."{DIGIT}*
+REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 
 %%
 {WS}		{
 		//Do nothing
 		}
 
-{SIGN}?[1-9]+{DIGIT}*		{
+{INTEGER}	{
 		printf("Matched int, val = %s\n", yytext);
 		yylval.intval = atoi(yytext);
 		yTRACE(INT_VAL);
 		return (INT_VAL);
 }
 
-{SIGN}?{DIGIT}+"."{DIGIT}*	{
+{DECIMAL}	{
 		printf("matched float\n");
 		yylval.floatval = strtof(yytext, NULL);
 		yTRACE(FLOAT_VAL);
 		}
-
 
 "int"      	{
 		printf ("match int type\n");
@@ -230,6 +231,13 @@ SIGN	    [+|-]
 		return (SEMICOL_TOK);
 		}
 
+","		{
+		printf ("match comma tok\n");
+	     	yTRACE(COMMA_TOK);
+		return (COMMA_TOK);
+
+		}
+
 "if"      	{
 		printf ("match if tok\n");
 	     	yTRACE(IF_TOK);
@@ -251,12 +259,10 @@ SIGN	    [+|-]
 
 {ID}		{
 		printf("matched identifier\n");
-		int i = 0;
-		for (; yytext[i] != '\0'; ++i) {
-			;
-		}
-		if (i > 32)
+		int str_len = strlen(yytext);
+		if (str_len > 32)
 			yERROR("Identifier too long\n");
+		yylval.id_len = str_len;
 		yTRACE(ID_VAL);
 		return (ID_VAL);
 		}
