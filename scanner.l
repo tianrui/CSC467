@@ -43,6 +43,7 @@ SIGN	    [+|-]
 
 {SIGN}?{DIGIT}+"."{DIGIT}*	{
 		printf("matched float\n");
+		yylval.floatval = strtof(yytext, NULL);
 		yTRACE(FLOAT_VAL);
 		}
 
@@ -139,7 +140,7 @@ SIGN	    [+|-]
 		}
 
 "/"      	{
-		printf ("match divid tok\n");
+		printf ("match divide tok\n");
 	     	yTRACE(DIV_TOK);
 		return (DIV_TOK);
 		}
@@ -249,6 +250,12 @@ SIGN	    [+|-]
 
 {ID}		{
 		printf("matched identifier\n");
+		int i = 0;
+		for (; yytext[i] != '\0'; ++i) {
+			;
+		}
+		if (i > 32)
+			yERROR("Identifier too long\n");
 		yTRACE(ID_VAL);
 		return (ID_VAL);
 		}
