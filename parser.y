@@ -52,7 +52,7 @@ extern int yyline;        /* variable holding current line number   */
 
 
 // TODO:Modify me to add more data types
-// Can access me from flex useing yyval
+// Can access me from flex using yyval
 
 %union {
   int intval;
@@ -66,8 +66,8 @@ extern int yyline;        /* variable holding current line number   */
 %token    MUL_TOK ADD_TOK SUB_TOK DIV_TOK ASSIGN_TOK 
 %token    NOT_TOK AND_TOK OR_TOK XOR_TOK LS_TOK GT_TOK
 %token    LPAREN_TOK RPAREN_TOK LBRACE_TOK RBRACE_TOK LBRACKET_TOK RBRACKET_TOK
-%token	  SEMICOL_TOK COMMA_TOK TRUE_TOK FALSE_TOK
-%token	  IF_TOK ELSE_TOK WHILE_TOK
+%token    SEMICOL_TOK COMMA_TOK TRUE_TOK FALSE_TOK
+%token    IF_TOK ELSE_TOK WHILE_TOK
 
 
 %start    program
@@ -92,34 +92,34 @@ tokens
   ;
 // TODO: replace myToken with the token the you defined.
 token
-  :	ID_VAL 
-  |	INT_VAL 
-  |	INT_TOK
-  |	FLOAT_VAL
-  |	BOOL_TOK
-  |	BVEC2_TOK 
-  |	BVEC3_TOK 
-  |	BVEC4_TOK 
-  | 	IVEC2_TOK 
-  |	IVEC3_TOK 
-  |	IVEC4_TOK
+  : ID_VAL 
+  | INT_VAL 
+  | INT_TOK
+  | FLOAT_VAL
+  | BOOL_TOK
+  | BVEC2_TOK 
+  | BVEC3_TOK 
+  | BVEC4_TOK 
+  |   IVEC2_TOK 
+  | IVEC3_TOK 
+  | IVEC4_TOK
   |     VEC2_TOK 
-  |	VEC3_TOK 
-  |	VEC4_TOK 
-  |	FLOAT_TOK 
-  |	MUL_TOK 
-  |	ADD_TOK 
-  |	SUB_TOK 
-  |	DIV_TOK 
-  |	ASSIGN_TOK
-  |	NOT_TOK 
-  |	AND_TOK 
-  |	OR_TOK 
-  |	XOR_TOK 
-  |	LS_TOK 
-  |	GT_TOK | TRUE_TOK | FALSE_TOK
-  | 	LPAREN_TOK | RPAREN_TOK | LBRACE_TOK | RBRACE_TOK | LBRACKET_TOK | RBRACKET_TOK | SEMICOL_TOK | COMMA_TOK
-  |	IF_TOK | ELSE_TOK | WHILE_TOK
+  | VEC3_TOK 
+  | VEC4_TOK 
+  | FLOAT_TOK 
+  | MUL_TOK 
+  | ADD_TOK 
+  | SUB_TOK 
+  | DIV_TOK 
+  | ASSIGN_TOK
+  | NOT_TOK 
+  | AND_TOK 
+  | OR_TOK 
+  | XOR_TOK 
+  | LS_TOK 
+  | GT_TOK | TRUE_TOK | FALSE_TOK
+  |   LPAREN_TOK | RPAREN_TOK | LBRACE_TOK | RBRACE_TOK | LBRACKET_TOK | RBRACKET_TOK | SEMICOL_TOK | COMMA_TOK
+  | IF_TOK | ELSE_TOK | WHILE_TOK
 
   ;
 
