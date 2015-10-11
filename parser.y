@@ -60,12 +60,12 @@ extern int yyline;        /* variable holding current line number   */
   int id_len;
 }
 // TODO:Replace myToken with your tokens, you can use these tokens in flex
-%token    INTTOK FLOATTOK IDTOK
-%token    INT_TTOK BOOL_TTOK BVEC2_TTOK BVEC3_TTOK BVEC4_TTOK IVEC2_TTOK IVEC3_TTOK IVEC4_TTOK
-%token    VEC2_TTOK VEC3_TTOK VEC4_TTOK FLOAT_TTOK
+%token    INT_VAL FLOAT_VAL ID_VAL
+%token    INT_TOK BOOL_TOK BVEC2_TOK BVEC3_TOK BVEC4_TOK IVEC2_TOK IVEC3_TOK IVEC4_TOK
+%token    VEC2_TOK VEC3_TOK VEC4_TOK FLOAT_TOK
 %token    MUL_TOK ADD_TOK SUB_TOK DIV_TOK ASSIGN_TOK 
-%token    NOT_TOK AND_TOK OR_TOK XOR_TOK LS_TOK LE_TOK GT_TOK GE_TOK
-%token    LPAREN_TOK RPAREN_TOK LBRACE_TOK RBRACE_TOK
+%token    NOT_TOK AND_TOK OR_TOK XOR_TOK LS_TOK GT_TOK
+%token    LPAREN_TOK RPAREN_TOK LBRACE_TOK RBRACE_TOK LBRACKET_TOK RBRACKET_TOK
 %token	  SEMICOL_TOK
 %token	  IF_TOK ELSE_TOK WHILE_TOK
 
@@ -92,10 +92,34 @@ tokens
   ;
 // TODO: replace myToken with the token the you defined.
 token
-  :    IDTOK 
-  |    INT_TTOK 
-  |	INTTOK
-  |                     
+  :	ID_VAL 
+  |	INT_VAL 
+  |	INT_TOK
+  |	BOOL_TOK
+  |	BVEC2_TOK 
+  |	BVEC3_TOK 
+  |	BVEC4_TOK 
+  | 	IVEC2_TOK 
+  |	IVEC3_TOK 
+  |	IVEC4_TOK
+  |     VEC2_TOK 
+  |	VEC3_TOK 
+  |	VEC4_TOK 
+  |	FLOAT_TOK 
+  |	MUL_TOK 
+  |	ADD_TOK 
+  |	SUB_TOK 
+  |	DIV_TOK 
+  |	ASSIGN_TOK
+  |	NOT_TOK 
+  |	AND_TOK 
+  |	OR_TOK 
+  |	XOR_TOK 
+  |	LS_TOK 
+  |	GT_TOK
+  | 	LPAREN_TOK | RPAREN_TOK | LBRACE_TOK | RBRACE_TOK | LBRACKET_TOK | RBRACKET_TOK | SEMICOL_TOK
+  |	IF_TOK | ELSE_TOK | WHILE_TOK
+
   ;
 
 
