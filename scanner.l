@@ -2,7 +2,8 @@
 /**********************************************************************
  *
  * **YOUR GROUP INFO SHOULD GO HERE**
- *
+ *  Chen Hao Zhang
+ *  Ray Xiao
  *  Interface to the scanner module for CSC467 course project
  **********************************************************************/
 
