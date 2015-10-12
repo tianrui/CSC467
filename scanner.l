@@ -8,8 +8,7 @@
  *  Interface to the scanner module for CSC467 course project
  **********************************************************************/
 
-#include <limits.h>
-#include <float.h>
+#include <stdlib.h>
 #include <math.h>
 #include "common.h"
 #include "parser.tab.h"
@@ -19,7 +18,7 @@
 #define YY_USER_INIT { yyin = inputFile; }
 #define yyinput      input
 #define yTRACE(x)    { if (traceScanner) fprintf(traceFile, "TOKEN %3d : %s\n", x, yytext); }
-#define yERROR(x)    { fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: %s\n", yyline, x); errorOccurred = TRUE; yyterminate(); }
+#define yERROR(x)    { fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: %s\n", yyline, x); errorOccurred = TRUE;; }
 
 int CheckInt(void);
 int yyline = 1;
@@ -41,14 +40,18 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
         }
 
 {INTEGER}   {
-        printf("Matched int, val = %s\n", yytext);
+        //printf("Matched int, val = %s\n", yytext);
         int tmp_val = atoi(yytext);
-        printf("after atoi value is %d\n", tmp_val);
-        if (tmp_val > INT_MAX) {
+        long int tmp_long = strtol(yytext, NULL, 10);
+        long int int_max = 2147483647; // max and min value of int is known
+        long int int_min = -2147483638;
+        //printf("after atoi value is %d\n", tmp_val);
+        //printf("after strtol value is %ld\n", tmp_long);
+        if (tmp_long > int_max) {
             yERROR("Int overflow detected");
         }
         else {
-        if (tmp_val < INT_MIN) {
+        if (tmp_long < int_min) {
             yERROR("Int underflow detected");
         }
         else {
@@ -60,14 +63,15 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 }
 
 {DECIMAL}   {
-        printf("matched float\n");
+        //printf("matched float %s\n", yytext);
         float tmp_val = strtof(yytext, NULL);
-        printf("after strtof value is %f\n", tmp_val);
-        if (tmp_val > FLT_MAX) {
+        //printf("after strtof value is %f\n", tmp_val);
+        if (tmp_val == HUGE_VALF ||
+            tmp_val == -HUGE_VALF) {
             yERROR("Float overflow detected");
         }
         else {
-        if (tmp_val < FLT_MIN) {
+        if (tmp_val ==0 && errno == ERANGE) {
             yERROR("Float underflow detected");
         }
         else {
