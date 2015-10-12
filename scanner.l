@@ -45,8 +45,8 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
         long int tmp_long = strtol(yytext, NULL, 10);
         long int int_max = 2147483647; // max and min value of int is known
         long int int_min = -2147483638;
-        //printf("after atoi value is %d\n", tmp_val);
-        //printf("after strtol value is %ld\n", tmp_long);
+        printf("after atoi value is %d\n", tmp_val);
+        printf("after strtol value is %ld\n", tmp_long);
         if (tmp_long > int_max) {
             yERROR("Int overflow detected");
         }
@@ -65,7 +65,10 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 {DECIMAL}   {
         //printf("matched float %s\n", yytext);
         float tmp_val = strtof(yytext, NULL);
-        //printf("after strtof value is %f\n", tmp_val);
+        double tmp_double = strtod(yytext, NULL);
+
+        printf("after strtof value is %f\n", tmp_val);
+        printf("after strtod value is %lf\n", tmp_double);
         if (tmp_val == HUGE_VALF ||
             tmp_val == -HUGE_VALF) {
             yERROR("Float overflow detected");
