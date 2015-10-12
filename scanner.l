@@ -42,21 +42,26 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 {INTEGER}   {
         //printf("Matched int, val = %s\n", yytext);
         int tmp_val = atoi(yytext);
+        int intlen = 0;
+        for (; yytext[intlen] != '\0'; ++intlen)
+            ;
+        if (intlen > 12)
+            yERROR("Int too long");
         long int tmp_long = strtol(yytext, NULL, 10);
         long int int_max = 2147483647; // max and min value of int is known
         long int int_min = -2147483638;
-        printf("after atoi value is %d\n", tmp_val);
-        printf("after strtol value is %ld\n", tmp_long);
+        //printf("after atoi value is %d\n", tmp_val);
+        //printf("after strtol value is %ld\n", tmp_long);
         if (tmp_long > int_max) {
             yERROR("Int overflow detected");
         }
         else {
-        if (tmp_long < int_min) {
-            yERROR("Int underflow detected");
-        }
-        else {
-            yylval.intval = tmp_val;
-        }
+            if (tmp_long < int_min) {
+                yERROR("Int underflow detected");
+            }
+            else {
+                yylval.intval = tmp_val;
+            }
         }
         yTRACE(INT_VAL);
         return (INT_VAL);
@@ -65,21 +70,19 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 {DECIMAL}   {
         //printf("matched float %s\n", yytext);
         float tmp_val = strtof(yytext, NULL);
-        double tmp_double = strtod(yytext, NULL);
-
-        printf("after strtof value is %f\n", tmp_val);
-        printf("after strtod value is %lf\n", tmp_double);
+        //printf("after strtof value is %f\n", tmp_val);
+        //printf("after strtod value is %lf\n", tmp_double);
         if (tmp_val == HUGE_VALF ||
             tmp_val == -HUGE_VALF) {
             yERROR("Float overflow detected");
         }
         else {
-        if (tmp_val ==0 && errno == ERANGE) {
-            yERROR("Float underflow detected");
-        }
-        else {
-            yylval.floatval = tmp_val;
-        }
+            if (tmp_val ==0 && errno == ERANGE) {
+                yERROR("Float underflow detected");
+            }
+            else {
+                yylval.floatval = tmp_val;
+            }
         }
         yTRACE(FLOAT_VAL);
         return(FLOAT_VAL);
