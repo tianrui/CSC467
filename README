@@ -18,3 +18,11 @@ Tianrui and Chenhao created the test_input file that have some purposely failing
 
 The scanner will store valid values scanned in the union yylval, to allow for easy access, including 
 int value, float value, and identifier length.
+
+The scanner works by finite state automaton. Token are represented as a number of states, and matching a token means reaching the final state.
+In the case of ambiguity, the scanner will match the longest match.
+For example: "while123", the scanner will match "while123" as an identifier, as oppose to matching the while keyword and an int iteral.
+
+Reglar expression used for matching tokens is defined by a set of "alphabet": Epsilon, Symbol, Alteration, Concatenation, Repetition.
+Regular expression in lex is made easy by syntaxical sugar.
+For example: [0-9] defines a digit, and more complex regular expressions are built using simple ones.
