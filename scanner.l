@@ -44,12 +44,17 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
         printf("Matched int, val = %s\n", yytext);
         int tmp_val = atoi(yytext);
         printf("after atoi value is %d\n", tmp_val);
-        if (tmp_val > INT_MAX)
+        if (tmp_val > INT_MAX) {
             yERROR("Int overflow detected");
-        else if (tmp_val < INT_MIN)
+        }
+        else {
+        if (tmp_val < INT_MIN) {
             yERROR("Int underflow detected");
-        else
+        }
+        else {
             yylval.intval = tmp_val;
+        }
+        }
         yTRACE(INT_VAL);
         return (INT_VAL);
 }
@@ -58,12 +63,17 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
         printf("matched float\n");
         float tmp_val = strtof(yytext, NULL);
         printf("after strtof value is %f\n", tmp_val);
-        if (tmp_val > FLT_MAX)
+        if (tmp_val > FLT_MAX) {
             yERROR("Float overflow detected");
-        else if (tmp_val < FLT_MIN)
+        }
+        else {
+        if (tmp_val < FLT_MIN) {
             yERROR("Float underflow detected");
-        else
+        }
+        else {
             yylval.floatval = tmp_val;
+        }
+        }
         yTRACE(FLOAT_VAL);
         return(FLOAT_VAL);
         }
