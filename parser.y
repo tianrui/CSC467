@@ -2,6 +2,9 @@
 /***********************************************************************
  * --YOUR GROUP INFO SHOULD GO HERE--
  * 
+ *   Chenhao Zhang
+ *   Tianrui Xiao
+ *   cd-007
  *   Interface to the parser module for CSC467 course project.
  * 
  *   Phase 2: Implement context free grammar for source language, and

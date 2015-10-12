@@ -3,11 +3,14 @@
  *
  * **YOUR GROUP INFO SHOULD GO HERE**
  *  Chen Hao Zhang
- *  Ray Xiao
+ *  Tianrui Xiao
+ *  cd-007
  *  Interface to the scanner module for CSC467 course project
  **********************************************************************/
 
 #include <limits.h>
+#include <float.h>
+#include <math.h>
 #include "common.h"
 #include "parser.tab.h"
 #include "string.h"
@@ -38,8 +41,9 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
         }
 
 {INTEGER}   {
-        //printf("Matched int, val = %s\n", yytext);
+        printf("Matched int, val = %s\n", yytext);
         int tmp_val = atoi(yytext);
+        printf("after atoi value is %d\n", tmp_val);
         if (tmp_val > INT_MAX)
             yERROR("Int overflow detected");
         else if (tmp_val < INT_MIN)
@@ -51,8 +55,9 @@ REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
 }
 
 {DECIMAL}   {
-        //printf("matched float\n");
+        printf("matched float\n");
         float tmp_val = strtof(yytext, NULL);
+        printf("after strtof value is %f\n", tmp_val);
         if (tmp_val > FLT_MAX)
             yERROR("Float overflow detected");
         else if (tmp_val < FLT_MIN)

@@ -3,3 +3,18 @@ Run command:
 2) ./compiler467 -Tn -R trace.out -E error.out test_input
 
 Check trace output
+
+Running with -T enables the tracing functionality, n/p/x specifies tracing for scanner/parser/program execution. 
+The -R tracefile flag allows the user to specify an output for the trace, and -E errorfile allows the errors to be dumped.
+
+
+Token Generation
+The design of tokens was fairly straightforward, and Chenhao was responsible for the more difficult task of 
+designing the correct regular expressions for tokens, in particular the int and float value tokens.
+Tianrui was primarily responsible for declaring the tokens in the parser.y file and implementing safety checks 
+on data types the scanner encounters, including checking for type overflow and identifiers exceeding 32 chars.
+Overflow/underflow is detected based on comparison with the values scanned and INT_MAX or INT_MIN.
+Tianrui and Chenhao created the test_input file that have some purposely failing test cases in the scanner.
+
+The scanner will store valid values scanned in the union yylval, to allow for easy access, including 
+int value, float value, and identifier length.
