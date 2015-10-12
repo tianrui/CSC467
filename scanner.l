@@ -2,8 +2,8 @@
 /**********************************************************************
  *
  * **YOUR GROUP INFO SHOULD GO HERE**
- *  Chen Hao Zhang
- *  Tianrui Xiao
+ *  Chen Hao Zhang 999272228
+ *  Tianrui Xiao 999018049
  *  cd-007
  *  Interface to the scanner module for CSC467 course project
  **********************************************************************/

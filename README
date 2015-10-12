@@ -1,3 +1,7 @@
+Group: cd-007
+Chen Hao Zhang 999272228
+Tianrui Xiao 999018049
+
 Run command:
 1) make
 2) ./compiler467 -Tn -R trace.out -E error.out test_input
