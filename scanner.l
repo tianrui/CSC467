@@ -2,321 +2,174 @@
 /**********************************************************************
  *
  * **YOUR GROUP INFO SHOULD GO HERE**
- *  Chen Hao Zhang
- *  Tianrui Xiao
- *  cd-007
+ *
  *  Interface to the scanner module for CSC467 course project
  **********************************************************************/
 
+#include <stdlib.h>
 #include <limits.h>
 #include <float.h>
 #include <math.h>
+#include <string.h>
+
 #include "common.h"
 #include "parser.tab.h"
-#include "string.h"
-
 
 #define YY_USER_INIT { yyin = inputFile; }
 #define yyinput      input
 #define yTRACE(x)    { if (traceScanner) fprintf(traceFile, "TOKEN %3d : %s\n", x, yytext); }
-#define yERROR(x)    { fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: %s\n", yyline, x); errorOccurred = TRUE; yyterminate(); }
+#define yERROR(x)    { fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: %s\n", yyline, x); errorOccurred = TRUE; }
+#define yOUT(x)      { yTRACE(x); return x; }
 
-int CheckInt(void);
+/* forward declarations */
+int ParseComment(void);
+int ParseInt(void);
+int ParseFloat(void);
+int ParseIdent(void);
 int yyline = 1;
 
 %}
 %option noyywrap
 
-WS          [ \t]
-DIGIT       [0-9]
-ID          [_a-zA-Z][_a-zA-Z0-9]*
-SIGN        [+|-]
-INTEGER     {SIGN}?(0|[1-9]{DIGIT}*)
-DECIMAL     {INTEGER}"."{DIGIT}*
-REAL        ({INTEGER}|{DECIMAL})E{SIGN}({DIGIT}*)
+%%
+
+"/*"                          { if(!ParseComment()) { yyterminate(); } }
+
+[ \t]                         { }
+\r?\n                         { yyline++; }
+<<EOF>>                       { yyterminate(); }
+
+[+\-*/\^]                     { yOUT(yytext[0]); }
+[()[\]{}]                     { yOUT(yytext[0]); }
+[<>=!]                        { yOUT(yytext[0]); }
+";"                           { yOUT(yytext[0]); }
+"&&"                          { yOUT(AND); }
+"||"                          { yOUT(OR); }
+"!="                          { yOUT(NEQ); }
+"<="                          { yOUT(LEQ); }
+">="                          { yOUT(GEQ); }
+"=="                          { yOUT(EQ); }
+
+const                         { yOUT(CONST); }
+bool                          { yOUT(BOOL_T); }
+int                           { yOUT(INT_T); }
+float                         { yOUT(FLOAT_T); }
+vec(2|3|4)                    { yylval.as_vec = yytext[3] - '1'; yOUT(VEC_T); }
+ivec(2|3|4)                   { yylval.as_vec = yytext[4] - '1'; yOUT(IVEC_T); }
+bvec(2|3|4)                   { yylval.as_vec = yytext[4] - '1'; yOUT(BVEC_T); }
+
+if                            { yOUT(IF); }
+else                          { yOUT(ELSE); }
+while                         { yOUT(WHILE); }
+
+dp3                           { yylval.as_func = 0; yOUT(FUNC); }
+rsq                           { yylval.as_func = 2; yOUT(FUNC); }
+lit                           { yylval.as_func = 1; yOUT(FUNC); }
+
+true                          { yOUT(TRUE_C); }
+false                         { yOUT(FALSE_C); }
+
+0                             { yylval.as_int = 0; yOUT(INT_C); }                  
+[1-9][0-9]*                   { if(ParseInt()) { yOUT(INT_C); } yyterminate(); }
+
+(0|([1-9][0-9]*))\.[0-9]*     { if(ParseFloat()) { yOUT(FLOAT_C); } yyterminate(); }
+\.[0-9]+                      { if(ParseFloat()) { yOUT(FLOAT_C); } yyterminate(); }
+
+[A-Za-z_][A-Za-z0-9_]*        { if(ParseIdent()) { yOUT(ID); } yyterminate(); }
+
+0[0-9]+                       { yERROR("Octal numbers are not allowed.");  yyterminate(); }
+[0-9]+[a-zA-Z_]+              { yERROR("Integers and identifiers/keywords must be separated by whitespace.");  yyterminate(); }
+.                             { yERROR("Unknown token");  yyterminate(); }
 
 %%
-{WS}        {
-        //Do nothing
-        }
 
-{INTEGER}   {
-        printf("Matched int, val = %s\n", yytext);
-        int tmp_val = atoi(yytext);
-        printf("after atoi value is %d\n", tmp_val);
-        if (tmp_val > INT_MAX)
-            yERROR("Int overflow detected");
-        else if (tmp_val < INT_MIN)
-            yERROR("Int underflow detected");
-        else
-            yylval.intval = tmp_val;
-        yTRACE(INT_VAL);
-        return (INT_VAL);
+/* Constants used later */
+enum {
+  MAX_INT_LIT = (1 << 21) - 1,
+  MIN_INT_LIT = -MAX_INT_LIT,
+  MAX_IDENT_LEN = 32
+};
+
+/* Eat a C-style comment. */
+int ParseComment(void) {
+  int c1 = 0;
+  int c2 = yyinput();
+  int curline = yyline;
+  for(;;) {
+    if (c2 == EOF) {
+      fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: Unmatched /*\n", curline);
+      errorOccurred = TRUE;
+      return 0;
+    }
+    if ('*' == c1 && '/' == c2) {
+      break;
+    }
+    c1 = c2;
+    c2 = yyinput();
+    if ('\n' == c1 && EOF != c2) {
+      yyline++;
+    }
+  }
+  return 1;
 }
 
-{DECIMAL}   {
-        printf("matched float\n");
-        float tmp_val = strtof(yytext, NULL);
-        printf("after strtof value is %f\n", tmp_val);
-        if (tmp_val > FLT_MAX)
-            yERROR("Float overflow detected");
-        else if (tmp_val < FLT_MIN)
-            yERROR("Float underflow detected");
-        else
-            yylval.floatval = tmp_val;
-        yTRACE(FLOAT_VAL);
-        return(FLOAT_VAL);
-        }
+/* Convert a string to an integer token. */
+int ParseInt(void) {
+  long num = strtol(yytext, NULL, 10);
+  if(ERANGE == errno) {
+    if(LONG_MAX == num || LONG_MIN == num) {
+      yERROR("Integer literal is out of range (case 1).");
+      return 0;
+    }
+  }
 
-"int"       {
-        //printf ("match int type\n");
-            yTRACE(INT_TOK);
-        return (INT_TOK);
-        }
+  if(MAX_INT_LIT < num || MIN_INT_LIT > num) {
+    yERROR("Integer literal is out of range (case 2).");
+    return 0;
+  }
 
-"bool"          {
-        //printf ("match bool type\n");
-            yTRACE(BOOL_TOK);
-        return (BOOL_TOK);
-        }
+  yylval.as_int = (int) num;
+  return 1;
+}
 
-"bvec2"         {
-        //printf ("match bvec2 type\n");
-            yTRACE(BVEC2_TOK);
-        return (BVEC2_TOK);
-        }
+/* Convert a string to a float token. */
+int ParseFloat(void) {
+  double num = strtod(yytext, NULL);
+  
+  if(ERANGE == errno) {
+    if(HUGE_VAL == num || -HUGE_VAL == num) {
+      yERROR("Floating point literal is out of range (case 1).");
+      return 0;
+    }
+  }
 
+  /* a NaN value; this is weird */
+  if(num != num) {
+    yERROR("Floating point literal is NaN.");
+    return 0;
+  }
 
-"bvec3"         {
-        //printf ("match bvec3 type\n");
-            yTRACE(BVEC3_TOK);
-        return (BVEC3_TOK);
-        }
+  /* out of range; we consider overflow but not underflow */
+  if(FLT_MAX < num || -FLT_MAX > num) {
+    yERROR("Floating point literal is out of range (case 2).");
+    return 0;
+  }  
 
-"bvec4"         {
-        //printf ("match bvec4 type\n");
-            yTRACE(BVEC4_TOK);
-        return (BVEC4_TOK);
-        }
+  yylval.as_float = (float) num;
+  return 1;
+}
 
-"ivec2"         {
-        //printf ("match ivec2 type\n");
-            yTRACE(IVEC2_TOK);
-        return (IVEC2_TOK);
-        }
+/* Convert a string into an identifier token. */
+int ParseIdent(void) {
+  if(MAX_IDENT_LEN < yyleng) {
+    yERROR("Identifier is too long.");
+    return 0;
+  }
 
-"ivec3"         {
-        //printf ("match ivec3 type\n");
-            yTRACE(IVEC3_TOK);
-        return (IVEC3_TOK);
-        }
+  char *ident = (char *) calloc(yyleng + 1, sizeof(char));
+  memcpy(ident, yytext, yyleng);
 
-"ivec4"         {
-        //printf ("match ivec4 type\n");
-            yTRACE(IVEC4_TOK);
-        return (IVEC4_TOK);
-        }
+  yylval.as_str = ident;
+  return 1; 
+}
 
-"vec2"          {
-        //printf ("match vec2 type\n");
-            yTRACE(VEC2_TOK);
-        return (VEC2_TOK);
-        }
-
-"vec3"          {
-        //printf ("match vec3 type\n");
-            yTRACE(VEC3_TOK);
-        return (VEC3_TOK);
-        }
-
-"vec4"          {
-        //printf ("match vec4 type\n");
-            yTRACE(VEC4_TOK);
-        return (VEC4_TOK);
-        }
-
-"float"         {
-        //printf ("match float type\n");
-            yTRACE(FLOAT_TOK);
-        return (FLOAT_TOK);
-        }
-
-"*"         {
-        //printf ("match multiply tok\n");
-            yTRACE(MUL_TOK);
-        return (MUL_TOK);
-        }
-
-"+"         {
-        //printf ("match add tok\n");
-            yTRACE(ADD_TOK);
-        return (ADD_TOK);
-        }
-
-"-"         {
-        //printf ("match subtract tok\n");
-            yTRACE(SUB_TOK);
-        return (SUB_TOK);
-        }
-
-"/"         {
-        //printf ("match divide tok\n");
-            yTRACE(DIV_TOK);
-        return (DIV_TOK);
-        }
-
-"="         {
-        //printf ("match assign tok\n");
-            yTRACE(ASSIGN_TOK);
-        return (ASSIGN_TOK);
-        }
-
-"true"          {
-        //printf ("match true tok\n");
-            yTRACE(TRUE_TOK);
-        return (TRUE_TOK);
-        }
-
-"false"         {
-        //printf ("match false tok\n");
-            yTRACE(FALSE_TOK);
-        return (FALSE_TOK);
-        }
-
-"!"         {
-        //printf ("match not tok\n");
-            yTRACE(NOT_TOK);
-        return (NOT_TOK);
-        }
-
-"&"         {
-        //printf ("match and tok\n");
-            yTRACE(AND_TOK);
-        return (AND_TOK);
-        }
-
-"|"         {
-        //printf ("match or tok\n");
-            yTRACE(OR_TOK);
-        return (OR_TOK);
-        }
-
-"^"         {
-        //printf ("match xor tok\n");
-            yTRACE(XOR_TOK);
-        return (XOR_TOK);
-        }
-
-"<"         {
-        //printf ("match less than tok\n");
-            yTRACE(LS_TOK);
-        return (LS_TOK);
-        }
-
-">"         {
-        //printf ("match greater than tok\n");
-            yTRACE(GT_TOK);
-        return (GT_TOK);
-        }
-
-"("         {
-        //printf ("match left paren tok\n");
-            yTRACE(LPAREN_TOK);
-        return (LPAREN_TOK);
-        }
-
-")"         {
-        //printf ("match right paren tok\n");
-            yTRACE(RPAREN_TOK);
-        return (RPAREN_TOK);
-        }
-
-"{"         {
-        //printf ("match left brace tok\n");
-            yTRACE(LBRACE_TOK);
-        return (LBRACE_TOK);
-        }
-
-"}"         {
-        //printf ("match right brace tok\n");
-            yTRACE(RBRACE_TOK);
-        return (RBRACE_TOK);
-        }
-
-"["         {
-        //printf ("match left bracket tok\n");
-            yTRACE(LBRACKET_TOK);
-        return (LBRACKET_TOK);
-        }
-
-"]"         {
-        //printf ("match right bracket tok\n");
-            yTRACE(RBRACKET_TOK);
-        return (RBRACKET_TOK);
-        }
-
-";"         {
-        //printf ("match semi-colon tok\n");
-            yTRACE(SEMICOL_TOK);
-        return (SEMICOL_TOK);
-        }
-
-","     {
-        //printf ("match comma tok\n");
-            yTRACE(COMMA_TOK);
-        return (COMMA_TOK);
-
-        }
-
-"if"        {
-        //printf ("match if tok\n");
-            yTRACE(IF_TOK);
-        return (IF_TOK);
-        }
-
-"else"          {
-        //printf ("match else tok\n");
-            yTRACE(ELSE_TOK);
-        return (ELSE_TOK);
-        }
-
-"while"         {
-        //printf ("match while tok\n");
-            yTRACE(WHILE_TOK);
-        return (WHILE_TOK);
-        }
-
-
-{ID}        {
-        //printf("matched identifier\n");
-        int str_len = strlen(yytext);
-        if (str_len > 32)
-            yERROR("Identifier too long\n");
-        yylval.id_len = str_len;
-        yTRACE(ID_VAL);
-        return (ID_VAL);
-        }
-
-
-"/*"        {
-              int c1      = 0;
-              int c2      = yyinput();
-              int curline = yyline;
-              for(;;) {
-                if (c2 == EOF) {
-                  fprintf(errorFile, "\nLEXICAL ERROR, LINE %d: Unmatched /*\n", curline);
-                  errorOccurred = TRUE;
-                  yyterminate();
-                }
-                if (c1 == '*' && c2 == '/')
-                  break;
-                c1 = c2;
-                c2 = yyinput();
-                if (c1 == '\n' && c2 != EOF)
-                  yyline++;
-              }
-            }
-
-.           { yERROR("Unknown token"); }
-
-%%
