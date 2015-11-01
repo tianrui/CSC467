@@ -1,6 +1,8 @@
 %{
 /***********************************************************************
- * --YOUR GROUP INFO SHOULD GO HERE--
+ * cd007
+ * Tianrui Xiao 999018049
+ * Chenhao Zhang
  * 
  *   Interface to the parser module for CSC467 course project.
  * 
@@ -101,6 +103,7 @@ enum {
  *       language grammar
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
+/*
 program
   :   tokens       
   ;
@@ -130,7 +133,7 @@ token
   | VEC_T
   | IVEC_T
   | BVEC_T
-  | FUNC               
+  | FUNC
   | '+'
   | '-'
   | '*'
@@ -149,7 +152,101 @@ token
   | '{'
   | '}'                                    
   ;
+*/
+program
+  : scope
+  ;
 
+scope
+  : '{' declarations statements '}'
+  ;
+
+declarations
+  : declarations declaration
+  |
+  ;
+
+declaration
+  : type ID ';'
+  | type ID '=' expr ';'
+  |
+  ;
+
+statement
+  : var '=' expr ';'
+  | 'if' '(' expr ')' statement 'else' statement
+  | 'while' '('expr ')' statement
+  | scope
+  | ';'
+  ;
+
+else_statement
+  : 'else' statement
+  |
+  ;
+
+type
+  : FLOAT_T
+  | INT_T
+  | BOOL_T
+  | VEC_T
+  | IVEC_T
+  | BVEC_T
+  ;
+
+expr
+  : ctor
+  | fn
+  | INT_C
+  | FLOAT_C
+  | var
+  | unary_op expr
+  | expr binary_op expr
+  | TRUE_C | FALSE_C
+  | '('expr ')'
+  ;
+
+var
+  : ID
+  | ID '[' INT_C ']'
+
+unary_op
+  : '!'
+  | '-'
+  ;
+
+binary_op
+  : '&&'
+  | '||'
+  | '=='
+  | '!='
+  | '<'
+  | '<='
+  ;
+
+ctor
+  : type '(' arguments ')'
+  ;
+
+fn
+  : fn_name '(' arguments_opt ')'
+  ;
+
+fn_name
+  : 'dp3'
+  | 'lit'
+  | 'rsq'
+  ;
+
+arguments_opt
+  : arguments
+  |
+  ;
+
+arguments
+  : arguments ',' expr
+  | expr
+  ;
 
 %%
 
