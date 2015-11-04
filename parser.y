@@ -74,7 +74,7 @@ enum {
 %token          FALSE_C TRUE_C
 %token          FUNC
 %token          IF WHILE ELSE
-%token          AND OR NEQ EQ LEQ GEQ
+%token          AND OR NEQ EQ LEQ GEQ COMMA
 
 // links specific values of tokens to yyval
 %token <as_vec>   VEC_T
@@ -103,7 +103,7 @@ enum {
  *       language grammar
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
-/*
+
 program
   :   tokens       
   ;
@@ -119,6 +119,7 @@ token
   | LEQ
   | GEQ
   | EQ
+  | COMMA
   | TRUE_C
   | FALSE_C
   | INT_C
@@ -152,7 +153,8 @@ token
   | '{'
   | '}'                                    
   ;
-*/
+
+/*
 program
   : scope
   ;
@@ -247,6 +249,7 @@ arguments
   : arguments ',' expr
   | expr
   ;
+*/
 
 %%
 
