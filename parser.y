@@ -104,9 +104,6 @@ enum {
  *    2. Implement the trace parser option of the compiler
  ***********************************************************************/
 
-program
-  :   tokens       
-  ;
 tokens
   :  tokens token  
   |
@@ -154,7 +151,6 @@ token
   | '}'                                    
   ;
 
-/*
 program
   : scope
   ;
@@ -249,7 +245,6 @@ arguments
   : arguments ',' expr
   | expr
   ;
-*/
 
 %%
 
