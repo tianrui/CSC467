@@ -203,21 +203,21 @@ unary_op
   ;
 
 binary_op
-  : '&&'
+  : AND
   { yTRACE("binary_op -> AND\n");}
-  | '||'
+  | OR
   { yTRACE("binary_op -> OR\n");}
-  | '=='
+  | EQ
   { yTRACE("binary_op -> EQ\n");}
-  | '!='
+  | NEQ
   { yTRACE("binary_op -> NE\n");}
   | '<'
   { yTRACE("binary_op -> <\n");}
-  | '<='
+  | LEQ
   { yTRACE("binary_op -> LEQ\n");}
   | '>'
   { yTRACE("binary_op -> >\n");}
-  | '>='
+  | GEQ
   { yTRACE("binary_op -> GEQ\n");}
   | '+'
   { yTRACE("binary_op -> +\n");}
