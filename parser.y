@@ -136,9 +136,9 @@ statements
 statement
   : var '=' expr ';'
   { yTRACE("statement -> variable = epxression\n");}
-  | 'if' '(' expr ')' statement else_statement
+  | IF '(' expr ')' statement else_statement
   { yTRACE("statement -> if (expression) stament else statement\n");}
-  | 'while' '('expr ')' statement
+  | WHILE '('expr ')' statement
   { yTRACE("statement -> while (expression) statement\n");}
   | scope
   { yTRACE("statement -> scope\n");}
@@ -147,7 +147,7 @@ statement
   ;
 
 else_statement
-  : 'else' statement
+  : ELSE statement
   |
   ;
 
