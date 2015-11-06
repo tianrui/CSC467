@@ -130,7 +130,7 @@ declaration
 statements
   : statements statement
   { yTRACE("statements -> statements statement\n");}
-  | statement
+  |
   ;
 
 statement
