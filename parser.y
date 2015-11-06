@@ -114,9 +114,8 @@ scope
   ;
 
 declarations
-  : declarations declaration
+  : declaration
   { yTRACE("declarations -> declarations declaration\n");}
-  | declaration
   ;
 
 declaration
@@ -124,6 +123,8 @@ declaration
   { yTRACE("declaration -> type ID\n");}
   | CONST type ID '=' expr ';'
   { yTRACE("declaration -> const type ID = expr\n");}
+  | declaration type ID ';'
+  | declaration CONST type ID '=' expr ';'
   |
   ;
 
@@ -212,7 +213,7 @@ binary_op
   { yTRACE("binary_op -> NE\n");}
   | '<'
   { yTRACE("binary_op -> <\n");}
-  | '<=i'
+  | '<='
   { yTRACE("binary_op -> LEQ\n");}
   | '>'
   { yTRACE("binary_op -> >\n");}
