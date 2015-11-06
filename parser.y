@@ -136,10 +136,10 @@ statements
 statement
   : var '=' expr ';'
   { yTRACE("statement -> variable = epxression\n");}
-  | 'if' '(' expr ')' statement 'else' statement
+  | 'if' '(' expr ')' statement else_statement
   { yTRACE("statement -> if (expression) stament else statement\n");}
   | 'while' '('expr ')' statement
-  { yTRACE("statement -> while (expression)statement\n");}
+  { yTRACE("statement -> while (expression) statement\n");}
   | scope
   { yTRACE("statement -> scope\n");}
   | ';'
@@ -211,39 +211,55 @@ binary_op
   | '!='
   { yTRACE("binary_op -> NE\n");}
   | '<'
-  { yTRACE("binary_op -> L\n");}
+  { yTRACE("binary_op -> <\n");}
   | '<=i'
+  { yTRACE("binary_op -> LEQ\n");}
   | '>'
+  { yTRACE("binary_op -> >\n");}
   | '>='
+  { yTRACE("binary_op -> GEQ\n");}
   | '+'
+  { yTRACE("binary_op -> +\n");}
   | '-'
+  { yTRACE("binary_op -> -\n");}
   | '*'
+  { yTRACE("binary_op -> *\n");}
   | '/'
+  { yTRACE("binary_op -> /\n");}
   | '^'
+  { yTRACE("binary_op -> ^\n");}
   ;
 
 ctor
   : type '(' arguments ')'
+  { yTRACE("constructor -> ( arguemnts )\n");}
   ;
 
 fn
   : fn_name '(' arguments_opt ')'
+  { yTRACE("function -> function name ( arguments_opt )\n");}
   ;
 
 fn_name
   : 'dp3'
+  { yTRACE("function name -> dp3\n");}
   | 'lit'
+  { yTRACE("function name -> lit\n");}
   | 'rsq'
+  { yTRACE("function name -> rsq\n");}
   ;
 
 arguments_opt
   : arguments
+  { yTRACE("arguments_opt -> arguments\n");}
   |
   ;
 
 arguments
   : arguments ',' expr
+  { yTRACE("arguments -> arguments, expression\n");}
   | expr
+  { yTRACE("arguments -> expression\n");}
   ;
 
 %%
