@@ -1,0 +1,113 @@
+http://www.cs.arizona.edu/~debray/Teaching/CSc453/DOCS/conflicts.pdf
+http://www.cs.man.ac.uk/~pjj/cs212/ho/node7.html
+
+program
+  : scope
+  ;
+
+//Not sure about if this will work, i think it should be ok
+scope
+  : '{' declarations statements '}'
+  ;
+
+//Should be done like this I think
+declarations
+  : declaration
+  | declarations declaration
+  ;
+
+declarations
+  : declarations declaration
+  |
+  ;
+
+declaration
+  : type ID ';'`
+  | type ID '=' expr ';'
+  |
+  ;
+
+
+statements
+  : statement
+  | statements statement
+  ;
+
+statement
+  : var '=' expr ';'
+  | IF '(' expr ')' statement ELSE else_statement
+  | 'while' '('expr ')' statement
+  | scope
+  | ';'
+  ;
+
+//Might be a problem here
+else_statement
+  : ELSE statement
+  |
+  ;
+
+type
+  : FLOAT_T
+  | INT_T
+  | BOOL_T
+  | VEC_T
+  | IVEC_T
+  | BVEC_T
+  ;
+
+expr
+  : ctor
+  | fn
+  | INT_C
+  | FLOAT_C
+  | var
+  | unary_op expr
+  | expr binary_op expr
+  | TRUE_C | FALSE_C
+  | '(' expr ')'
+  ;
+
+var
+  : ID
+  | ID '[' INT_C ']'
+  ;
+
+unary_op
+  : '!'
+  | '-'
+  ;
+
+binary_op
+  : '&&'
+  | '||'
+  | '=='
+  | '!='
+  | '<'
+  | '<='
+  ;
+
+ctor
+  : type '(' arguments ')'
+  ;
+
+fn
+  : fn_name '(' arguments_opt ')'
+  ;
+
+fn_name
+  : 'dp3'
+  | 'lit'
+  | 'rsq'
+  ;
+
+arguments_opt
+  : arguments
+  |
+  ;
+
+arguments
+  : arguments ',' expr
+  | expr
+  ;
+

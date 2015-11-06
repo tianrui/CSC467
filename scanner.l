@@ -43,13 +43,13 @@ int yyline = 1;
 [()[\]{}]                     { yOUT(yytext[0]); }
 [<>=!]                        { yOUT(yytext[0]); }
 ";"                           { yOUT(yytext[0]); }
+","                           { yOUT(yytext[0]); }
 "&&"                          { yOUT(AND); }
 "||"                          { yOUT(OR); }
 "!="                          { yOUT(NEQ); }
 "<="                          { yOUT(LEQ); }
 ">="                          { yOUT(GEQ); }
 "=="                          { yOUT(EQ); }
-","                           { yOUT(COMMA); }
 
 const                         { yOUT(CONST); }
 bool                          { yOUT(BOOL_T); }
@@ -77,7 +77,6 @@ false                         { yOUT(FALSE_C); }
 \.[0-9]+                      { if(ParseFloat()) { yOUT(FLOAT_C); } yyterminate(); }
 
 [A-Za-z_][A-Za-z0-9_]*        { if(ParseIdent()) { yOUT(ID); } yyterminate(); }
-
 
 0[0-9]+                       { yERROR("Octal numbers are not allowed.");  yyterminate(); }
 [0-9]+[a-zA-Z_]+              { yERROR("Integers and identifiers/keywords must be separated by whitespace.");  yyterminate(); }
