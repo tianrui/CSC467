@@ -116,7 +116,7 @@ scope
 declarations
   : declarations declaration
   { yTRACE("declarations -> declarations declaration\n");}
-  |
+  | declaration
   ;
 
 declaration
@@ -130,7 +130,7 @@ declaration
 statements
   : statements statement
   { yTRACE("statements -> statements statement\n");}
-  |
+  | statement
   ;
 
 statement
