@@ -170,6 +170,11 @@ declaration
   |
   ;
 
+statements
+  : statements statement
+  |
+  ;
+
 statement
   : var '=' expr ';'
   | 'if' '(' expr ')' statement 'else' statement
