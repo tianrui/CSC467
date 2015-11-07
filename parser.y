@@ -84,15 +84,21 @@ enum {
 %token <as_int>   INT_C
 %token <as_str>   ID
 
-%left     '|'
+// Operator precedence
+%left     '|'       //Lowest
 %left     '&'
 %nonassoc '=' NEQ '<' LEQ '>' GEQ
 %left     '+' '-'
 %left     '*' '/'
 %right    '^'
 %nonassoc '!' UMINUS
-
+%left     '(' '['   //Highest
 %start    program
+
+// Initial solution for else dangling
+// match statements with else and without else
+%left MATCHED_ELSE
+%left UNMATCHED_ELSE
 
 %%
 
@@ -137,19 +143,16 @@ statements
 statement
   : var '=' expr ';'
   { yTRACE("statement -> variable = epxression\n");}
-  | IF '(' expr ')' statement else_statement
-  { yTRACE("statement -> if (expression) stament else statement\n");}
+  | IF '(' expr ')' statement ELSE statement %prec MATCHED_ELSE
+  { yTRACE("statement -> if (expression) statement else statement\n");}
+  | IF '(' expr ')' statement %prec UNMATCHED_ELSE
+  { yTRACE("statement -> if (expression) statement\n");}
   | WHILE '('expr ')' statement
   { yTRACE("statement -> while (expression) statement\n");}
   | scope
   { yTRACE("statement -> scope\n");}
   | ';'
   { yTRACE("statement -> ;\n");}
-  ;
-
-else_statement
-  : ELSE statement
-  |
   ;
 
 type
