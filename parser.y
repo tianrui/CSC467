@@ -93,13 +93,16 @@ enum {
 %right    '^'
 %nonassoc '!' UMINUS
 %left     '(' '['   //Highest
-%start    program
 
 // Initial solution for else dangling
 // match statements with else and without else
+// treat the two cases (if then, if then else)
+// as separate rules with left associativity
+// to be paired with the closest else
 %left MATCHED_ELSE
 %left UNMATCHED_ELSE
 
+%start    program
 %%
 
 /***********************************************************************
