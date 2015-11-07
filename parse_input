@@ -3,6 +3,7 @@ int i;
 int j;
 int k;
 i = 5;
+j = 2 + (2 * 4/2) *k * !i -3-4-5 *(2);
 
 if (i == 5)
 {    j = 6+5;
@@ -13,4 +14,19 @@ else
     k = 9;
 }else
     k = 10;
+
+if (true) {
+	if (false) {
+		if (false) {
+
+		} else {
+		
+		}
+	}
+	else {
+	}
 }
+
+
+}
+

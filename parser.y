@@ -128,24 +128,26 @@ declarations
   ;
 
 declaration
-  : type ID ';'
-  { yTRACE("declaration -> type ID\n");}
-  | CONST type ID '=' expr ';'
-  { yTRACE("declaration -> const type ID = expr\n");}
-  | declaration type ID ';'
+  : declaration type ID ';'
+  { yTRACE("declaration -> type ID\n");}  
+  | declaration type ID '=' expr ';'
+  { yTRACE("declaration -> type ID = expr\n");}  
   | declaration CONST type ID '=' expr ';'
+  { yTRACE("declaration -> const type ID = expr\n");}  
   |
+  { yTRACE("declaration -> empty\n");}
   ;
 
 statements
   : statements statement
   { yTRACE("statements -> statements statement\n");}
-  | statement
+  |
+  { yTRACE("statements -> empty\n");}
   ;
 
 statement
   : var '=' expr ';'
-  { yTRACE("statement -> variable = epxression\n");}
+  { yTRACE("statement -> variable = expression\n");}
   | IF '(' expr ')' statement ELSE statement %prec MATCHED_ELSE
   { yTRACE("statement -> if (expression) statement else statement\n");}
   | IF '(' expr ')' statement %prec UNMATCHED_ELSE
@@ -157,6 +159,28 @@ statement
   | ';'
   { yTRACE("statement -> ;\n");}
   ;
+
+/*
+statement
+  : var '=' expr ';'
+  { yTRACE("statement -> variable = expression\n");}
+  | IF '(' expr ')' statement else_statement
+  { yTRACE("statement -> if (expression) statement\n");}
+  | WHILE '('expr ')' statement
+  { yTRACE("statement -> while (expression) statement\n");}
+  | scope
+  { yTRACE("statement -> scope\n");}
+  | ';'
+  { yTRACE("statement -> ;\n");}
+  ;
+
+else_statement
+  : ELSE statement
+  { yTRACE("else_statement -> else statment\n");}
+  |
+  ;
+*/
+
 
 type
   : FLOAT_T
@@ -193,6 +217,35 @@ expr
   | '(' expr ')'
   { yTRACE("expression -> (expression)\n");}
   ;
+
+/*
+expr
+  : unary_op expr
+  { yTRACE("expression -> unary_op expression\n");}
+  | expr_prime binary_op expr
+  { yTRACE("expression -> expression binary_op expression\n");}
+  | expr_prime
+  ;
+
+expr_prime
+	: ctor
+  { yTRACE("expression -> constructor\n");}
+  | fn
+  { yTRACE("expression -> function\n");}
+  | INT_C
+  { yTRACE("expression -> int literal\n");}
+  | FLOAT_C
+  { yTRACE("expression -> float literal\n");}
+  | var
+  { yTRACE("expression -> variable\n");}
+  | TRUE_C 
+  { yTRACE("expression -> true\n");}  
+  | FALSE_C
+  { yTRACE("expression -> false\n");}
+  | '(' expr ')'
+	{ yTRACE("expression -> (expression)\n");}
+  ;
+*/
 
 var
   : ID
@@ -248,12 +301,18 @@ fn
   ;
 
 fn_name
-  : 'dp3'
-  { yTRACE("function name -> dp3\n");}
-  | 'lit'
-  { yTRACE("function name -> lit\n");}
-  | 'rsq'
-  { yTRACE("function name -> rsq\n");}
+  : FUNC
+  { 
+    if (yyval.as_func == 0) {
+      yTRACE("function name -> dp3\n");
+    }
+    if (yyval.as_func == 1) {
+      yTRACE("function name -> lit\n");
+    }
+    if (yyval.as_func == 2) {
+      yTRACE("function name -> rsq\n");
+    }
+  }
   ;
 
 arguments_opt
@@ -296,4 +355,5 @@ void yyerror(char* s) {
     fprintf(errorFile, ": Reading token %s\n", yytname[YYTRANSLATE(yychar)]);
   }
 }
+
 
