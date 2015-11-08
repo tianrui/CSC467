@@ -1,0 +1,15 @@
+Group info:
+Tianrui Xiao 999018049
+Chenhao Zhang
+
+Run command:
+1) make
+2) ./compiler467 -Tp -R trace.out -E error.out parse_input
+Trace options:
+-n, enabling tracing in scanner
+-p, enable tracing in parser
+Running with -T enables tracing functionality, -R tracefile allows to specify output file for trace, and -E errorfile dumps errors to log file.
+
+Parsing
+The basic implementation of the grammar rules and valid operators according to the specifications for Bison was done by Tianrui, including the implementation of simple printout messages for tracing. Chenhao was primarily responsible for the conversion of ambiguous grammar rules to resolve shift/reduce conflicts.
+

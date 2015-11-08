@@ -86,7 +86,7 @@ enum {
 
 // Operator precedence
 %right "then" ELSE
-%right "two" "one"
+//%right "two" "one"
 
 %left     OR     //Lowest
 %left     AND
@@ -94,7 +94,7 @@ enum {
 %left     '+' '-'
 %left     '*' '/'
 %right    '^'
-%right '!' UMINUS
+%right    '!' UMINUS
 
 %left     '(' '['   //Highest
 
@@ -188,10 +188,38 @@ expr
   { yTRACE("expression -> float literal\n");}
   | var
   { yTRACE("expression -> variable\n");}
-  | unary_op expr %prec "one"
+  | unary_op expr %prec UMINUS
   { yTRACE("expression -> unary_op expression\n");}
-  | expr binary_op expr %prec "two"
-  { yTRACE("expression -> expression binary_op expression\n"); }
+  //| '!' expr %prec '!'
+  //{ yTRACE("unary_op -> !\n");}
+  //| '-' expr %prec UMINUS
+  //{ yTRACE("unary_op -> -\n");}
+  | expr AND expr
+  { yTRACE("expression -> expression AND expression\n"); }
+  | expr OR expr
+  { yTRACE("expression -> expression OR expression\n"); }
+  | expr EQ expr
+  { yTRACE("expression -> expression EQ expression\n"); }
+  | expr NEQ expr
+  { yTRACE("expression -> expression NEQ expression\n"); }
+  | expr '<' expr
+  { yTRACE("expression -> expression < expression\n"); }
+  | expr LEQ expr
+  { yTRACE("expression -> expression LEQ expression\n"); }
+  | expr '>' expr
+  { yTRACE("expression -> expression > expression\n"); }
+  | expr GEQ expr
+  { yTRACE("expression -> expression GEQ expression\n"); }
+  | expr '+' expr
+  { yTRACE("expression -> expression + expression\n"); }
+  | expr '-' expr
+  { yTRACE("expression -> expression - expression\n"); }
+  | expr '*' expr
+  { yTRACE("expression -> expression * expression\n"); }
+  | expr '/' expr
+  { yTRACE("expression -> expression / expression\n"); }
+  | expr '^' expr
+  { yTRACE("expression -> expression ^ expression\n"); }
   | TRUE_C 
   { yTRACE("expression -> true\n");}
   | FALSE_C
@@ -208,12 +236,12 @@ var
   ;
 
 unary_op
-  : '!'
+  : '!' %prec '!'
   { yTRACE("unary_op -> !\n");}
-  | '-'
+  | '-' %prec UMINUS
   { yTRACE("unary_op -> -\n");}
   ;
-
+/*
 binary_op
   : AND
   { yTRACE("binary_op -> AND\n");}
@@ -242,7 +270,7 @@ binary_op
   | '^'
   { yTRACE("binary_op -> ^\n");}
   ;
-
+*/
 ctor
   : type '(' arguments ')' %prec '('
   { yTRACE("constructor -> ( arguemnts )\n");}
