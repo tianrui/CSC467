@@ -125,19 +125,19 @@ scope
   ;
 
 declarations
-  : declaration
-  { yTRACE("declarations -> declaration\n");}
+  : declarations declaration
+  { yTRACE("declarations -> declarations declaration\n");}
+  |
+  { yTRACE("declarations -> empty\n");}
   ;
 
 declaration
-  : declaration type ID ';'
+  : type ID ';'
   { yTRACE("declaration -> type ID\n");}  
-  | declaration type ID '=' expr ';'
+  | type ID '=' expr ';'
   { yTRACE("declaration -> type ID = expression\n");}  
-  | declaration CONST type ID '=' expr ';'
+  | CONST type ID '=' expr ';'
   { yTRACE("declaration -> const type ID = expression\n");}  
-  |
-  { yTRACE("declaration -> empty\n");}
   ;
 
 statements
@@ -191,7 +191,7 @@ expr
   | unary_op expr %prec "one"
   { yTRACE("expression -> unary_op expression\n");}
   | expr binary_op expr %prec "two"
-  { yTRACE("expression -> expression binary_op expression\n");}
+  { yTRACE("expression -> expression binary_op expression\n"); }
   | TRUE_C 
   { yTRACE("expression -> true\n");}
   | FALSE_C
