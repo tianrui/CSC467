@@ -203,7 +203,7 @@ expr
 var
   : ID
   { yTRACE("variable -> ID\n");}
-  | ID '[' INT_C ']' %prec '[' %prec '['
+  | ID '[' INT_C ']' %prec '['
   { yTRACE("variable -> ID[int literal]\n");}
   ;
 
