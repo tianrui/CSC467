@@ -86,6 +86,7 @@ enum {
 
 // Operator precedence
 %right "then" ELSE
+%right "two" "one"
 
 %left     OR     //Lowest
 %left     AND
@@ -96,14 +97,12 @@ enum {
 %right '!' UMINUS
 
 %left     '(' '['   //Highest
-
+%left 
 // Initial solution for else dangling
 // match statements with else and without else
 // treat the two cases (if then, if then else)
 // as separate rules with left associativity
 // to be paired with the closest else
-%left MATCHED_ELSE
-%left UNMATCHED_ELSE
 
 %start    program
 %%
@@ -163,28 +162,6 @@ statement
   { yTRACE("statement -> ;\n");}
   ;
 
-/*
-statement
-  : var '=' expr ';'
-  { yTRACE("statement -> variable = expression\n");}
-  | IF '(' expr ')' statement else_statement
-  { yTRACE("statement -> if (expression) statement\n");}
-  | WHILE '('expr ')' statement
-  { yTRACE("statement -> while (expression) statement\n");}
-  | scope
-  { yTRACE("statement -> scope\n");}
-  | ';'
-  { yTRACE("statement -> ;\n");}
-  ;
-
-else_statement
-  : ELSE statement
-  { yTRACE("else_statement -> else statment\n");}
-  |
-  ;
-*/
-
-
 type
   : FLOAT_T
   { yTRACE("type -> FLOAT_T\n");}
@@ -211,44 +188,17 @@ expr
   { yTRACE("expression -> float literal\n");}
   | var
   { yTRACE("expression -> variable\n");}
-  | unary_op expr
+  | unary_op expr %prec "one"
   { yTRACE("expression -> unary_op expression\n");}
-  | expr binary_op expr
+  | expr binary_op expr %prec "two"
   { yTRACE("expression -> expression binary_op expression\n");}
-  | TRUE_C | FALSE_C
-  { yTRACE("expression -> true\false\n");}
-  | '(' expr ')'
-  { yTRACE("expression -> (expression)\n");}
-  ;
-
-/*
-expr
-  : unary_op expr
-  { yTRACE("expression -> unary_op expression\n");}
-  | expr_prime binary_op expr
-  { yTRACE("expression -> expression binary_op expression\n");}
-  | expr_prime
-  ;
-
-expr_prime
-	: ctor
-  { yTRACE("expression -> constructor\n");}
-  | fn
-  { yTRACE("expression -> function\n");}
-  | INT_C
-  { yTRACE("expression -> int literal\n");}
-  | FLOAT_C
-  { yTRACE("expression -> float literal\n");}
-  | var
-  { yTRACE("expression -> variable\n");}
   | TRUE_C 
-  { yTRACE("expression -> true\n");}  
+  { yTRACE("expression -> true\n");}
   | FALSE_C
   { yTRACE("expression -> false\n");}
   | '(' expr ')'
-	{ yTRACE("expression -> (expression)\n");}
+  { yTRACE("expression -> (expression)\n");}
   ;
-*/
 
 var
   : ID

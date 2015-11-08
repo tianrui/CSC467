@@ -1,5 +1,7 @@
 {
 /* Declarations */
+
+
 int i;
 int j;
 int k;
@@ -7,13 +9,13 @@ bool a;
 vec3 myvec;
 vec2 myVec = vec2(1.0, 5.0); /* Ok */
 vec2 myVec = vec2(1,5); /* Handout says not ok... but still works*/
-bvec3 myBVec = bvec3(true,false,true);
+bvec3 myBVec = bvec3(true,false,true,true,);
 
 ivec4 myVec = ivec4(0,1,2,3);
 int num = myVec[2];
 
 int num = 5.0;
-const int num = 1 + a;
+const int num =  5;
 
 
 
