@@ -2,7 +2,7 @@
 /***********************************************************************
  * cd007
  * Tianrui Xiao 999018049
- * Chenhao Zhang
+ * Chenhao Zhang 999272228
  * 
  *   Interface to the parser module for CSC467 course project.
  * 
@@ -97,7 +97,7 @@ enum {
 %right '!' UMINUS
 
 %left     '(' '['   //Highest
-%left 
+
 // Initial solution for else dangling
 // match statements with else and without else
 // treat the two cases (if then, if then else)
@@ -126,16 +126,16 @@ scope
 
 declarations
   : declaration
-  { yTRACE("declarations -> declarations declaration\n");}
+  { yTRACE("declarations -> declaration\n");}
   ;
 
 declaration
   : declaration type ID ';'
   { yTRACE("declaration -> type ID\n");}  
   | declaration type ID '=' expr ';'
-  { yTRACE("declaration -> type ID = expr\n");}  
+  { yTRACE("declaration -> type ID = expression\n");}  
   | declaration CONST type ID '=' expr ';'
-  { yTRACE("declaration -> const type ID = expr\n");}  
+  { yTRACE("declaration -> const type ID = expression\n");}  
   |
   { yTRACE("declaration -> empty\n");}
   ;
@@ -154,7 +154,7 @@ statement
   { yTRACE("statement -> if (expression) statement\n");}
   | IF '(' expr ')' statement ELSE statement 
   { yTRACE("statement -> if (expression) statement else statement\n");}
-  | WHILE '('expr ')' statement
+  | WHILE '(' expr ')' statement
   { yTRACE("statement -> while (expression) statement\n");}
   | scope
   { yTRACE("statement -> scope\n");}

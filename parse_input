@@ -9,10 +9,11 @@ bool a;
 vec3 myvec;
 vec2 myVec = vec2(1.0, 5.0); /* Ok */
 vec2 myVec = vec2(1,5); /* Handout says not ok... but still works*/
-bvec3 myBVec = bvec3(true,false,true,true,);
+bvec3 myBVec = bvec3(true,false,true,true);
 
 ivec4 myVec = ivec4(0,1,2,3);
 int num = myVec[2];
+int test_con = int (1,2,3);
 
 int num = 5.0;
 const int num =  5;
@@ -47,6 +48,14 @@ if (true) {
 	}
 }
 
+while (rsq(1,2,3,t1,t3)) {
+	if (t == 2) {
+
+	} else {
+		if (false) {
+		}
+	}
+}
 
 }
 
