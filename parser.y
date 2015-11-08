@@ -85,13 +85,16 @@ enum {
 %token <as_str>   ID
 
 // Operator precedence
-%left     '|'       //Lowest
-%left     '&'
-%nonassoc '=' NEQ '<' LEQ '>' GEQ
+%right "then" ELSE
+
+%left     OR     //Lowest
+%left     AND
+%left     '<' LEQ '>' GEQ EQ NEQ
 %left     '+' '-'
 %left     '*' '/'
 %right    '^'
-%nonassoc '!' UMINUS
+%right '!' UMINUS
+
 %left     '(' '['   //Highest
 
 // Initial solution for else dangling
@@ -148,10 +151,10 @@ statements
 statement
   : var '=' expr ';'
   { yTRACE("statement -> variable = expression\n");}
-  | IF '(' expr ')' statement ELSE statement %prec MATCHED_ELSE
-  { yTRACE("statement -> if (expression) statement else statement\n");}
-  | IF '(' expr ')' statement %prec UNMATCHED_ELSE
+  | IF '(' expr ')' statement %prec "then"
   { yTRACE("statement -> if (expression) statement\n");}
+  | IF '(' expr ')' statement ELSE statement 
+  { yTRACE("statement -> if (expression) statement else statement\n");}
   | WHILE '('expr ')' statement
   { yTRACE("statement -> while (expression) statement\n");}
   | scope
