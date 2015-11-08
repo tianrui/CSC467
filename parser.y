@@ -253,7 +253,7 @@ expr_prime
 var
   : ID
   { yTRACE("variable -> ID\n");}
-  | ID '[' INT_C ']'
+  | ID '[' INT_C ']' %prec '[' %prec '['
   { yTRACE("variable -> ID[int literal]\n");}
   ;
 
@@ -294,12 +294,12 @@ binary_op
   ;
 
 ctor
-  : type '(' arguments ')'
+  : type '(' arguments ')' %prec '('
   { yTRACE("constructor -> ( arguemnts )\n");}
   ;
 
 fn
-  : fn_name '(' arguments_opt ')'
+  : fn_name '(' arguments_opt ')' %prec '('
   { yTRACE("function -> function name ( arguments_opt )\n");}
   ;
 
