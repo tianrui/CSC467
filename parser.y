@@ -85,8 +85,14 @@ enum {
 %token <as_str>   ID
 
 // Operator precedence
+
+// Solution for else dangling
+// match statements with else and without else
+// treat the two cases (if then, if then else)
+// as separate rules with right associativity
+// to promote shifting with ELSE when
+// a shift/reduce conflict occurs
 %right "then" ELSE
-//%right "two" "one"
 
 %left     OR     //Lowest
 %left     AND
@@ -97,13 +103,6 @@ enum {
 %right    '!' UMINUS
 
 %left     '(' '['   //Highest
-
-// Initial solution for else dangling
-// match statements with else and without else
-// treat the two cases (if then, if then else)
-// as separate rules with left associativity
-// to be paired with the closest else
-
 %start    program
 %%
 
@@ -190,10 +189,6 @@ expr
   { yTRACE("expression -> variable\n");}
   | unary_op expr %prec UMINUS
   { yTRACE("expression -> unary_op expression\n");}
-  //| '!' expr %prec '!'
-  //{ yTRACE("unary_op -> !\n");}
-  //| '-' expr %prec UMINUS
-  //{ yTRACE("unary_op -> -\n");}
   | expr AND expr
   { yTRACE("expression -> expression AND expression\n"); }
   | expr OR expr
