@@ -1,6 +1,7 @@
 Group info:
+cd007
 Tianrui Xiao 999018049
-Chenhao Zhang
+Chenhao Zhang 999272228
 
 Run command:
 1) make
@@ -11,5 +12,27 @@ Trace options:
 Running with -T enables tracing functionality, -R tracefile allows to specify output file for trace, and -E errorfile dumps errors to log file.
 
 Parsing
-The basic implementation of the grammar rules and valid operators according to the specifications for Bison was done by Tianrui, including the implementation of simple printout messages for tracing. Chenhao was primarily responsible for the conversion of ambiguous grammar rules to resolve shift/reduce conflicts.
+The basic implementation of the grammar rules and valid operators according to the specifications for Bison was done by Tianrui, including the implementation of simple printout messages for tracing, and coding documentation. Chenhao was primarily responsible for the conversion of ambiguous grammar rules to resolve shift/reduce conflicts, primarily in the dangling else problem, and the test cases in /tests/lab2/.
 
+The main challenge in this lab is understanding the grammar rules and formulating them in a way that is unambiguous to the Bison parser. In the event of a dangling else, we decided to match to the nearest if, so in the following case:
+
+if (c0)
+  a;
+if (c1)
+  b;
+else
+  c;
+
+we will be interpreted as
+
+if (c0)
+  a;
+if (c1) {
+  b;
+}else {
+  c;
+}
+
+We resolve this by adding a new operator precedence "then" for matching expressions that is right associative with same precedence as ELSE. Thus when a "if (expr) statement" is matched, it will be given less precedence than the "if (epxr) statement else statment" due to right associativity, so we promote shift.
+
+We also experienced difficulty when using the default grammar rules, which did not preserve operator precedence if a separate production rule was used specifically for binary_ops. Since we need to preserve operator precedence when reducing "expr binary_op expr" sequences based on the binary_op, it is necessary to directly have production rules with precedence for each of the operations with expressions. This resolved the rest of the shift/reduce conflicts when building the parser from Bison. Testing was done in small programs to verify some edge cases regarding operator precedence, function call precedence, array indexing and empty program.
