@@ -58,6 +58,7 @@ extern int yydebug;
  **********************************************************************/
 int main (int argc, char *argv[]) {
   getOpts (argc, argv); /* Set up and apply command line options */
+  //yydebug = 1;
 
 /***********************************************************************
  * Compiler Initialization.

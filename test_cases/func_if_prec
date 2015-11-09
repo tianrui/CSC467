@@ -1,0 +1,13 @@
+{
+	a =	rsq(1,2,3,t1,t3);
+	b = (rsq(2) + dp3(a,b)) * dp3(a,b,c);
+	if (rsq(a) == 2)
+		b = 2;
+	if (true)
+		b = 2 * 3;
+	else 
+		b = 3/4;
+	while (rsq(a) == 2) {
+		i = i + 1;
+	}
+}
